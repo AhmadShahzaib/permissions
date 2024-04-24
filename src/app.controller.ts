@@ -121,6 +121,7 @@ export class PermissionsController extends BaseController {
       const responseData = queryResponse.map(
         (permission) => new PermissionsResponse(permission),
       );
+      
       Logger.log('about to send permissions in response')
       return response.status(200).send({
         data: responseData,

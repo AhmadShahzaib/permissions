@@ -23,6 +23,8 @@ export class PermissionsResponse extends BaseResponseType {
 
   @ApiProperty()
   canList?: boolean;
+  @ApiProperty()
+  endpoint:string;
 
   @ApiProperty()
   canDelete?: boolean;
@@ -36,14 +38,15 @@ export class PermissionsResponse extends BaseResponseType {
   constructor(permissionDocument: PermissionDocument) {
     super();
     this.id = permissionDocument.id;
-    this.canActivate = permissionDocument.canActivate;
-    this.canCreate = permissionDocument.canCreate;
-    this.canDeactivate = permissionDocument.canDeactivate;
-    this.canDelete = permissionDocument.canDelete;
-    this.canEdit = permissionDocument.canEdit;
-    this.canList = permissionDocument.canList;
-    this.canView = permissionDocument.canView;
-    this.isActive = permissionDocument.isActive;
-    this.permissionId=permissionDocument.permissionId;
+    this.canActivate = permissionDocument?.canActivate;
+    this.canCreate = permissionDocument?.canCreate;
+    this.canDeactivate = permissionDocument?.canDeactivate;
+    this.canDelete = permissionDocument?.canDelete;
+    this.canEdit = permissionDocument?.canEdit;
+    this.canList = permissionDocument?.canList;
+    this.canView = permissionDocument?.canView;
+    this.isActive = permissionDocument?.isActive;
+    this.permissionId=permissionDocument?.permissionId;
+    this.endpoint = permissionDocument.endpoint;
   }
 }
