@@ -7,10 +7,9 @@ const axiosCall = async (data) => {
       data: data,
     };
 
-    let result = await axios(config);
-    console.log(result);
+  
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 };
 
@@ -24,26 +23,13 @@ const logData = async (req, data) => {
   } else if (Object.keys(req.body).length !== 0) {
     params = req.body;
   }
-  let dataForAxios = {
-    param: params,
-    method: req.method,
-    originalURL: req.originalUrl,
-    port: process.env.PORT,
-    serviceName:process.env.MICROSERVICE_NAME,
-    server: process.env.SERVICE_BASE_URL,
-    header:req.headers,
-    response: JSON.stringify(data),
-  };
-  await axiosCall(dataForAxios);
+ 
+  // await axiosCall(dataForAxios);
 };
 
 export const CustomInterceptor = (req, res, next) => {
   const oldSend = res.send;
-  res.send = (data) => {
-    logData(req, data);
-    res.send = oldSend;
-    return res.send(data);
-  };
+ 
   // if (next)
   next();
 };
