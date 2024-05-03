@@ -3,14 +3,14 @@ import { PermissionsResponse } from '../models';
 import {
   CombineDecorators,
   CombineDecoratorType,
-  PERMISSIONS,
+  USER,
 } from '@shafiqrathore/logeld-tenantbackend-common-future';
 import { ApiBearerAuth, ApiResponse, ApiQuery } from '@nestjs/swagger';
 
 export default function GetPermissionsDecorators() {
   const GetPermissionsDecorators: Array<CombineDecoratorType> = [
     Get(),
-    SetMetadata('permissions', [PERMISSIONS.LIST]),
+    SetMetadata('permissions', [USER.LIST]),
     ApiBearerAuth("access-token"),
     ApiResponse({ status: HttpStatus.OK, type: PermissionsResponse }),
     ApiQuery({
