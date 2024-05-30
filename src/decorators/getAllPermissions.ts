@@ -10,7 +10,7 @@ import { ApiBearerAuth, ApiResponse, ApiQuery } from '@nestjs/swagger';
 export default function GetAllPermissionsDecorators() {
   const GetAllPermissionsDecorators: Array<CombineDecoratorType> = [
     Get(`superAdmin`),
-    SetMetadata('permissions', [ROLES.ADD]),
+    SetMetadata('permissions', ["77334634"]),
     ApiBearerAuth("access-token"),
     ApiResponse({ status: HttpStatus.OK, type: PermissionsResponse }),
     ApiQuery({
