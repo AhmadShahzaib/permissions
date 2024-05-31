@@ -7,10 +7,10 @@ import {
 } from '@shafiqrathore/logeld-tenantbackend-common-future';
 import { ApiBearerAuth, ApiResponse, ApiQuery } from '@nestjs/swagger';
 
-export default function GetPermissionsDecorators() {
-  const GetPermissionsDecorators: Array<CombineDecoratorType> = [
-    Get(),
-    SetMetadata('permissions', [ROLES.ADD]),
+export default function GetAllPermissionsDecorators() {
+  const GetAllPermissionsDecorators: Array<CombineDecoratorType> = [
+    Get(`superAdmin`),
+    SetMetadata('permissions', ["77334634"]),
     ApiBearerAuth("access-token"),
     ApiResponse({ status: HttpStatus.OK, type: PermissionsResponse }),
     ApiQuery({
@@ -43,6 +43,6 @@ export default function GetPermissionsDecorators() {
       required: false,
     }),
   ];
-  return CombineDecorators(GetPermissionsDecorators);
+  return CombineDecorators(GetAllPermissionsDecorators);
 }
 

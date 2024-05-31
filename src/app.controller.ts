@@ -20,6 +20,8 @@ import { Response, Request } from 'express';
 import { MessagePattern } from '@nestjs/microservices';
 import AddPermissionDecorators from './decorators/addPermission';
 import GetPermissionsDecorators from './decorators/getPermissions';
+import GetAllPermissionsDecorators from './decorators/getAllPermissions';
+
 import EditPermissionDecorators from './decorators/update';
 import DeletePermissionDecorators from './decorators/remove';
 import GetSinglePermissionDecorators from './decorators/getPermissionById';
@@ -92,6 +94,66 @@ export class PermissionsController extends BaseController {
     );
     try {
       const { search, orderType, pageNo, limit } = queryParams;
+      const options = {'$and':[{isSuperAdmin:false}]};
+      if (search) {
+        options['$or'] = [{ endpoint: new RegExp(search.toString(), 'i') }];
+      }
+
+      Logger.log(`Calling find of permissions service with search options.`);
+      const query = this.permissionService.find(options);
+
+      Logger.log(`Adding sort in query.`);
+      if (queryParams.orderBy) {
+        query.sort({ endpoint: orderType ?? 1 });
+      } else {
+        query.sort({ createdAt: 1 });
+      }
+
+      Logger.log(
+        `Calling count to get total number of records. With above search options`,
+      );
+      const total = await this.permissionService.count(options);
+
+      Logger.log(`Executing query`);
+      const queryResponse = await query
+        .skip(((pageNo ?? 1) - 1) * (limit ?? 10))
+        .limit(limit ?? 10)
+        .exec();
+
+      const responseData = queryResponse.map(
+        (permission) => new PermissionsResponse(permission),
+      );
+
+      Logger.log('about to send permissions in response')
+      return response.status(200).send({
+        data: responseData,
+        total,
+        page: pageNo ?? 1,
+        last_page: Math.ceil(total / limit),
+      });
+    } catch (error) {
+      Logger.error({ message: error.message, stack: error.stack });
+      throw error;
+    }
+  }
+
+
+  // @------------------- Get permission list API controller -------------------
+  @GetAllPermissionsDecorators()
+  async getSuperPermissions(
+    @Query() queryParams: ListingParams,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
+    Logger.log(
+      `${request.method} request received from ${request.ip} for ${
+        request.originalUrl
+      } by: ${
+        !response.locals.user ? 'Unauthorized User' : response.locals.user.id
+      }`,
+    );
+    try {
+      const { search, orderType, pageNo, limit } = queryParams;
       const options = {};
       if (search) {
         options['$or'] = [{ endpoint: new RegExp(search.toString(), 'i') }];
@@ -121,7 +183,7 @@ export class PermissionsController extends BaseController {
       const responseData = queryResponse.map(
         (permission) => new PermissionsResponse(permission),
       );
-      
+
       Logger.log('about to send permissions in response')
       return response.status(200).send({
         data: responseData,
@@ -134,7 +196,6 @@ export class PermissionsController extends BaseController {
       throw error;
     }
   }
-
   // @------------------- Edit permission API controller -------------------
   @EditPermissionDecorators()
   async update(

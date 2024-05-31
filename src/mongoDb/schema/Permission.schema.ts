@@ -13,6 +13,7 @@ export const PermissionSchema = new mongoose.Schema(
     isActive: { type: Boolean, default: true, required: true },
     tenantId: { type: mongoose.Schema.Types.ObjectId, index: true },
     isDeleted: { type: Boolean, default: false },
+    isSuperAdmin: { type: Boolean, default: false },
     permissionId:{type:String, index:true}
   },
   { timestamps: true },
