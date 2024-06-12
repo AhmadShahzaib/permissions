@@ -1,7 +1,7 @@
 import axios from 'axios';
 const axiosCall = async (data) => {
   try {
-    let config = {
+    const config = {
       method: 'post',
       url: process.env.SERVICE_REQ_RES + ':' + process.env.SERVICE_REQ_RES_PORT,
       data: data,
