@@ -11,7 +11,7 @@ export default interface PermissionDocument extends Document {
   canDelete?: boolean;
   isActive?: boolean;
   permissionId:string;
-  isSuperAdmin:  Boolean;
+  isSuperAdmin:  boolean;
 
 }
 // export default interface iPermission extends Document {
